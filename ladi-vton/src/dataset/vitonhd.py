@@ -77,17 +77,19 @@ class VitonHDDataset(data.Dataset):
         else:
             filename = os.path.join(dataroot, f"{phase}_pairs.txt")
 
+
+        # 주의! txt파일에서 (im_name, c_name)으로 뽑지 않고 (c_name, im_name)로 뽑을거임!
         with open(filename, 'r') as f:
             for line in f.readlines():
                 if phase == 'train':
-                    im_name, _ = line.strip().split()
+                    _, im_name = line.strip().split()
                     c_name = im_name
                 else:
                     if order == 'paired':
-                        im_name, _ = line.strip().split()
+                        _, im_name = line.strip().split()
                         c_name = im_name
                     else:
-                        im_name, c_name = line.strip().split()
+                        c_name, im_name = line.strip().split()
 
                 im_names.append(im_name)
                 c_names.append(c_name)
@@ -124,7 +126,7 @@ class VitonHDDataset(data.Dataset):
         if "cloth" in self.outputlist:  # In-shop clothing image
             # Clothing image
             cloth = Image.open(os.path.join(dataroot, self.phase, 'cloth', c_name))
-            cloth = cloth.resize((self.width, self.height))
+            cloth = cloth.resize((self.width, self.height)) # Todo: resize만으로 될까?
             cloth = self.transform(cloth)  # [-1,1]
 
         if "image" in self.outputlist or "im_head" in self.outputlist or "im_cloth" in self.outputlist:
