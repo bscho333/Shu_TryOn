@@ -1,3 +1,3 @@
 import torch
 import numpy as np
-a
+a=10
