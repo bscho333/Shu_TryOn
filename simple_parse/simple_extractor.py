@@ -9,6 +9,9 @@
 @Desc    :   Simple Extractor
 @License :   This source code is licensed under the license found in the
              LICENSE file in the root directory of this source tree.
+
+             python simple_extractor.py --dataset "lip" --model-restore "C:\DL\Dataset\VT_Hub\backups\exp-schp-201908261155-lip.pth" --input-dir "C:\DL\Dataset\VT_Hub\train\image" --output-dir C:\DL\Dataset\VT_Hub\train\image-parse-v3
+             python simple_extractor.py --dataset "lip" --model-restore "C:\DL\Dataset\VT_Hub\backups\exp-schp-201908261155-lip.pth" --input-dir "C:\DL\Dataset\VT_Hub\test\image" --output-dir C:\DL\Dataset\VT_Hub\test\image-parse-v3
 """
 
 import os

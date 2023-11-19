@@ -25,6 +25,10 @@ torch.manual_seed(1234)
 PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+"""
+python src/train_tps.py --dataset vitonhd --vitonhd_dataroot C:\DL\Dataset\VT_Hub --checkpoints_dir C:\DL\Dataset\VT_Hub\backups\TPS_checkpoints --exp_name hub
+"""
+
 
 @torch.no_grad()
 def compute_metric(dataloader: DataLoader, tps: ConvNet_TPS, criterion_l1: nn.L1Loss, criterion_vgg: VGGLoss,
@@ -282,15 +286,15 @@ def extract_images(dataloader: DataLoader, tps: ConvNet_TPS, refinement: UNetVan
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, required=True, choices=["dresscode", "vitonhd"], help="dataset to use")
+    parser.add_argument("--dataset", type=str, default="vitonhd", help="dataset to use")
     parser.add_argument('--dresscode_dataroot', type=str, help='DressCode dataroot')
-    parser.add_argument('--checkpoints_dir', type=str, default=str(PROJECT_ROOT / "TPS_checkpoints"))
-    parser.add_argument('--vitonhd_dataroot', type=str, help='VitonHD dataroot')
-    parser.add_argument('--exp_name', type=str, required=True, help='experiment name')
+    parser.add_argument('--checkpoints_dir', type=str, default='C:/DL/Dataset/VT_Hub/backups/TPS_checkpoints')
+    parser.add_argument('--vitonhd_dataroot', type=str, default='C:/DL/Dataset/VT_Hub', help='VitonHD dataroot')
+    parser.add_argument('--exp_name', type=str, default='hub', help='experiment name')
     parser.add_argument('-b', '--batch_size', type=int, default=16, help='train/test batch size')
     parser.add_argument('-j', '--workers', type=int, default=10, help='number of data loading workers')
     parser.add_argument("--height", type=int, default=512)
-    parser.add_argument("--width", type=int, default=384)
+    parser.add_argument("--width", type=int, default=360)
     parser.add_argument('--const_weight', type=float, default=0.01, help='weight for the TPS constraint loss')
     parser.add_argument('--lr', type=float, default=1e-4, help='initial learning rate for adam')
     parser.add_argument('--wandb_log', default=False, action='store_true', help='use wandb to log the training')
@@ -407,10 +411,15 @@ def main():
     if os.path.exists(os.path.join(args.checkpoints_dir, args.exp_name, f"checkpoint_last.pth")):
         print('Loading full checkpoint')
         state_dict = torch.load(os.path.join(args.checkpoints_dir, args.exp_name, f"checkpoint_last.pth"))
+        print(state_dict.keys())
         tps.load_state_dict(state_dict['tps'])
         refinement.load_state_dict(state_dict['refinement'])
-        optimizer_tps.load_state_dict(state_dict['optimizer_tps'])
-        optimizer_ref.load_state_dict(state_dict['optimizer_ref'])
+        try:
+            optimizer_tps.load_state_dict(state_dict['optimizer_tps'])
+            optimizer_ref.load_state_dict(state_dict['optimizer_ref'])
+        except:
+            optimizer_tps = torch.optim.Adam(tps.parameters(), lr=args.lr, betas=(0.5, 0.99))
+            optimizer_ref = torch.optim.Adam(list(refinement.parameters()), lr=args.lr, betas=(0.5, 0.99))
         start_epoch = state_dict['epoch']
 
         if args.only_extraction:
@@ -512,7 +521,7 @@ def main():
             'refinement': refinement.state_dict(),
             'optimizer_tps': optimizer_tps.state_dict(),
             'optimizer_ref': optimizer_ref.state_dict(),
-        }, os.path.join(args.checkpoints_dir, args.exp_name, f"checkpoint_last.pth"))
+        }, os.path.join(args.checkpoints_dir, args.exp_name, f"tps_{e}_checkpoint_last.pth"))
 
     scaler = torch.cuda.amp.GradScaler()  # Initialize scaler again for refinement
 
@@ -585,7 +594,7 @@ def main():
             'refinement': refinement.state_dict(),
             'optimizer_tps': optimizer_tps.state_dict(),
             'optimizer_ref': optimizer_ref.state_dict(),
-        }, os.path.join(args.checkpoints_dir, args.exp_name, f"checkpoint_last.pth"))
+        }, os.path.join(args.checkpoints_dir, args.exp_name, f"ref_{e}_checkpoint_last.pth"))
 
     # Extract warped cloth images at the end of training
     print("Extracting warped cloth images...")
