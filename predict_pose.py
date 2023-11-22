@@ -249,9 +249,10 @@ def parse_args():
 
     return args
 def main():
-    img_file = 'dataset/00006_00.jpg'
-    pose_file = 'dataset/00006_00_keypoints.json'
-    generate_img_from_json(pose_file, img_file, 'dataset/test_out.jpg', model='body25')
+    args = parse_args()
+    img_file = args.img_dir
+    pose_file = args.pose_dir
+    generate_img_from_json(pose_file, img_file, args.output_dir, model='body25')
 
 if __name__ == '__main__':
     main()
