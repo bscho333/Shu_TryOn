@@ -3,6 +3,8 @@ import os
 import json
 import shutil
 
+# AI Hub Dataset을 VTON-HD 형식으로 바꿔주기 위한 코드
+# data_dir과 target_dir만 바꿔주면 작동
 data_dir = "/DL/Dataset/AI_Hub"
 target_dir = "/DL/Dataset/VT_Hub"
 for mode in ["train", "test"]:
