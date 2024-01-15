@@ -41,7 +41,7 @@ def parse_args():
     parser.add_argument(
         "--output_dir",
         type=str,
-        default="result",
+        default="/root/input/output",
         help="Path to the output directory",
     )
 
@@ -74,13 +74,13 @@ def parse_args():
     )
 
     parser.add_argument('--dresscode_dataroot', type=str, help='DressCode dataroot')
-    parser.add_argument('--vitonhd_dataroot', type=str, help='VitonHD dataroot')
+    parser.add_argument('--vitonhd_dataroot', type=str, default="/root/input", help='VitonHD dataroot')
 
     parser.add_argument("--num_workers", type=int, default=8, help="Number of workers for the dataloader")
 
     parser.add_argument("--num_vstar", default=16, type=int, help="Number of predicted v* images to use")
-    parser.add_argument("--test_order", type=str, required=True, choices=["unpaired", "paired"])
-    parser.add_argument("--dataset", type=str, required=True, choices=["dresscode", "vitonhd"], help="dataset to use")
+    parser.add_argument("--test_order", type=str, default="unpaired")
+    parser.add_argument("--dataset", type=str, default="vitonhd", help="dataset to use")
     parser.add_argument("--category", type=str, choices=['all', 'lower_body', 'upper_body', 'dresses'], default='all')
     parser.add_argument("--use_png", default=False, action="store_true", help="Whether to use png or jpg for saving")
     parser.add_argument("--num_inference_steps", default=50, type=int, help="Number of diffusion steps")

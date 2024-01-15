@@ -1,0 +1,2 @@
+cloth_00.jpg image_00.jpg
+cloth3_00.jpg image4_00.jpg
