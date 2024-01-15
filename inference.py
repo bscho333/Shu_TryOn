@@ -5,9 +5,13 @@ import os
 import U2Net.u2net_load as u2net_load
 import U2Net.u2net_run as u2net_run
 
-img_input = "/root/Shu_TryOn/input/test/image"
-cloth_input = "/root/Shu_TryOn/input/test/cloth"
-cloth_mask = "/root/Shu_TryOn/input/test/cloth-mask"
+current_root = os.getcwd()
+dataset_root = current_root + '/input'
+img_input = dataset_root + '/test/image'
+cloth_input = dataset_root + '/test/cloth'
+cloth_mask = dataset_root + '/test/cloth-mask'
+
+# os.system('echo python ladi-vton/src/inference.py --vitonhd_dataroot "'+current_root+'/input" --output_dir "'+current_root+'/input/output"')
 
 # 1. Resizing the original image
 orig_height = 1024
@@ -39,13 +43,13 @@ u2net = u2net_load.model(model_name='u2netp')
 u2net_run.infer(u2net, cloth_input, cloth_mask)
 
 # 3. For preparing image-parse-v3
-os.system('python simple_parse/simple_extractor.py --dataset "lip" --model-restore "/root/Shu_TryOn/simple_parse/exp-schp-201908261155-lip.pth" --input-dir "/root/Shu_TryOn/input/test/image" --output-dir /root/Shu_TryOn/input/test/image-parse-v3')
+os.system('python simple_parse/simple_extractor.py --dataset "lip" --model-restore "'+current_root+'/simple_parse/exp-schp-201908261155-lip.pth" --input-dir "'+current_root+'/input/test/image" --output-dir "'+current_root+'/input/test/image-parse-v3"')
 
 # 4. For preparing openpose_json
-os.system('python predict_pose.py --img_dir "./input/test/image" --model_path "./openpose/models/pose/body_25" --pose_dir "./input/test/openpose_json"')
+os.system('python predict_pose.py --img_dir "'+current_root+'/input/test/image" --model_path "'+current_root+'/openpose/models/pose/body_25" --pose_dir "'+current_root+'/input/test/openpose_json"')
 
 # 5. Inferencing LaDI-VTON
-os.system('python ladi-vton/src/inference.py')
+os.system('python ladi-vton/src/inference.py --vitonhd_dataroot "'+current_root+'/input" --output_dir "'+current_root+'/input/output"')
 
 print("Done!")
 

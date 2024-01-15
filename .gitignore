@@ -1,0 +1,6 @@
+ladi-vton/data/clip_cloth_embeddings
+ladi-vton/data/warped_cloths
+ladi-vton/data/warped_cloths_unpaired
+.ipynb_checkpoints/
+.pyc
+**/__pycache__

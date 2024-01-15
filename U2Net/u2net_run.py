@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms#, utils
-from u2net_test import normPRED
+from .u2net_test import normPRED
 # import torch.optim as optim
 
 import numpy as np
@@ -15,10 +15,10 @@ from PIL import Image
 import glob
 import warnings
 
-from data_loader import RescaleT
-from data_loader import ToTensor
-from data_loader import ToTensorLab
-from data_loader import SalObjDataset
+from .data_loader import RescaleT
+from .data_loader import ToTensor
+from .data_loader import ToTensorLab
+from .data_loader import SalObjDataset
 
 warnings.filterwarnings("ignore")
 
