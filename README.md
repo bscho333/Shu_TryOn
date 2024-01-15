@@ -162,12 +162,23 @@ First, create the `shu-tryon` environment with `environment.yml`
 conda env create -f environment.yml
 conda activate shu-tryon
 ```
-Next, put your cloth and model image in `~/Shu_TryOn/input/`
+Next, prepare the cloth and model image.
+<details>
+<summary>Prerequiring files</summary>
 
+We prepared 3 clothes and 1 model for demo.  
+But if you want to use arbitrary image, there are 5 files required.
+1. `~/Shu_TryOn/input/cloth`: cloth image. 
+2. `~/Shu_TryOn/input/image`: model image.
+3. `~/Shu_TryOn/input/cloth-mask`: masked image of cloth. you can use any masking model.
+4. `~/Shu_TryOn/input/image-parse-v3`: human segmentation image of model. you can simply acquire it by running following command:
 ```shell
 python simple_extractor.py --dataset "lip" --model-restore "C:\DL\Dataset\VT_Hub\backups\exp-schp-201908261155-lip.pth" --input-dir "C:\DL\Dataset\VT_Hub\test\image" --output-dir C:\DL\Dataset\VT_Hub\test\image-parse-v3
 ```
-
+5. openpose_json: estimated pose map json file of model image. you can simply acquire it by running following command:
 ```shell
-openpose.bin --image_dir /root/input/test/image --hand --disable_blending --display 0 --write_json {save_path} --num_gpu 1 --num_gpu_start 0
+python simple_extractor.py --dataset "lip" --model-restore "C:\DL\Dataset\VT_Hub\backups\exp-schp-201908261155-lip.pth" --input-dir "C:\DL\Dataset\VT_Hub\test\image" --output-dir C:\DL\Dataset\VT_Hub\test\image-parse-v3
 ```
+</details>
+
+put your cloth and model image in `~/Shu_TryOn/input/`

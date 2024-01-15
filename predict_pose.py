@@ -169,9 +169,8 @@ class general_body25_model(object):
         return points
 
 
-def generate_pose_keypoints(img_file, pose_file):
+def generate_pose_keypoints(img_file, pose_file, modelpath):
 
-    modelpath = 'pose'
     pose_model = general_body25_model(modelpath)
 
     res_points = pose_model.predict(img_file)
@@ -224,21 +223,21 @@ def parse_args():
     parser.add_argument(
         "--img_dir",
         type=str,
-        # default="stabilityai/stable-diffusion-2-inpainting",
+        default="./input/test/image",
         help="Path to input directory",
     )
 
     parser.add_argument(
-        "--output_dir",
+        "--model_path",
         type=str,
-        # default="result",
-        help="Path to the output directory",
+        default='./openpose/models/pose/body_25',
+        help="Path to the model directory",
     )
 
     parser.add_argument(
         "--pose_dir",
         type=str,
-        # default="stabilityai/stable-diffusion-2-inpainting",
+        default="./input/test/openpose_json",
         help="Path to input directory",
     )
 
@@ -250,9 +249,12 @@ def parse_args():
     return args
 def main():
     args = parse_args()
-    img_file = args.img_dir
-    pose_file = args.pose_dir
-    generate_img_from_json(pose_file, img_file, args.output_dir, model='body25')
+    img_dir = args.img_dir
+    pose_dir = args.pose_dir
+    for img_name in sorted(os.listdir(img_dir)):
+        img_path = os.path.join(img_dir, img_name)
+        pose_path = os.path.join(pose_dir, img_name.replace('.jpg', '_keypoints.json'))
+        generate_pose_keypoints(img_path, pose_path, args.model_path)
 
 if __name__ == '__main__':
     main()

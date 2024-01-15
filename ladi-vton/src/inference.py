@@ -41,7 +41,7 @@ def parse_args():
     parser.add_argument(
         "--output_dir",
         type=str,
-        default="result",
+        default="/root/input/output",
         help="Path to the output directory",
     )
 
@@ -74,7 +74,7 @@ def parse_args():
     )
 
     parser.add_argument('--dresscode_dataroot', type=str, help='DressCode dataroot')
-    parser.add_argument('--vitonhd_dataroot', type=str, help='VitonHD dataroot')
+    parser.add_argument('--vitonhd_dataroot', type=str, default="/root/input", help='VitonHD dataroot')
 
     parser.add_argument("--num_workers", type=int, default=8, help="Number of workers for the dataloader")
 
