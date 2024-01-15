@@ -170,15 +170,31 @@ We prepared 3 clothes and 1 model for demo.
 But if you want to use arbitrary image, there are 5 files required.
 1. `~/Shu_TryOn/input/cloth`: cloth image. 
 2. `~/Shu_TryOn/input/image`: model image.
-3. `~/Shu_TryOn/input/cloth-mask`: masked image of cloth. you can use any masking model.
-4. `~/Shu_TryOn/input/image-parse-v3`: human segmentation image of model. you can simply acquire it by running following command:
-```shell
-python simple_extractor.py --dataset "lip" --model-restore "C:\DL\Dataset\VT_Hub\backups\exp-schp-201908261155-lip.pth" --input-dir "C:\DL\Dataset\VT_Hub\test\image" --output-dir C:\DL\Dataset\VT_Hub\test\image-parse-v3
-```
-5. openpose_json: estimated pose map json file of model image. you can simply acquire it by running following command:
-```shell
-python simple_extractor.py --dataset "lip" --model-restore "C:\DL\Dataset\VT_Hub\backups\exp-schp-201908261155-lip.pth" --input-dir "C:\DL\Dataset\VT_Hub\test\image" --output-dir C:\DL\Dataset\VT_Hub\test\image-parse-v3
-```
+3. `~/Shu_TryOn/input/cloth-mask`: masked image of cloth.
+4. `~/Shu_TryOn/input/image-parse-v3`: human segmentation image of model.
+5. `~/Shu_TryOn/input/openpose_json`: estimated pose map json file of model image.
+
+>Since the `3`, `4`, `5` files can be acquired by `inference.py`, you only need cloth and model image. Recommened type is `.jpg`.
 </details>
 
-put your cloth and model image in `~/Shu_TryOn/input/`
+Put your cloth and model `.jpg` image in `~/Shu_TryOn/input/cloth` and `~/Shu_TryOn/input/image`.  
+
+Then, edit the `./input/test/test_pairs.txt`. This file guides the pair of each cloth and model image. Each pair should be on the same line, and cloth and model image should be splited with ' ' (space). The cloth image should be on left, and model image should be on right. Following highlight is the example:
+> Cloth iamge: `cloth5_00.jpg`, `abc.jpg`  
+> Model image: `abc.jpg`, `image5_00.jpg`  
+> If you want to match `cloth5_00.jpg` with `image5_00.jpg` and `abc.jpg` with `def.jpg`, 
+> 
+> The `test_pairs.txt` should be edited like this:
+> ```text
+> cloth5_00.jpg image5_00.jpg
+> abc.jpg def.jpg
+> ```
+
+Finally, run the commend below:
+```shell
+python inference.py
+```
+
+## Results
+<img width="1979" alt="스크린샷 2024-01-16 오전 12 17 55" src="https://github.com/bscho333/Shu_TryOn/assets/118449997/fdb6805f-9123-4e6b-a842-1e9f6faad24d">
+<img width="2390" alt="스크린샷 2024-01-16 오전 12 16 15" src="https://github.com/bscho333/Shu_TryOn/assets/118449997/33d1cd8d-512d-4c6f-872b-44aad96c2a59">
